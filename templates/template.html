@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+   <!--- basic page needs
+   ================================================== -->
+    <meta charset="utf-8">
+    <title>PD</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+   <!-- mobile specific metas
+   ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+   ================================================== -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+       <!-- script
+   ================================================== -->
+  <script src="{{ url_for('static', filename='js/modernizr.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/pace.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-2.1.3.min.js')}}"></script>
+
+</head>
+
+<body id="top">
+
+   <!-- home
+   ================================================== -->
+    <section id="home">
+
+        <div class="overlay"></div>
+        <div class="home-content-table">
+            <div class="home-content-tablecell">
+                <div class="row">
+                    <div class="col-twelve">
+                        <h1 class="animate-intro">
+                            Pill Detect
+                        </h1>
+                        <div class="more animate-intro">
+                            <a class="smoothscroll button stroke" href="#about">
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+                </div> <!-- end col-twelve -->
+            </div> <!-- end row -->
+        </div> <!-- end home-content-tablecell -->
+
+        <div class="scrolldown">
+            <a href="#about" class="scroll-icon smoothscroll">
+                Scroll Down
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+   </section> <!-- end home -->
+
+   <!-- about
+   ================================================== -->
+    <section id="about">
+
+        <div class="row about-wrap">
+            <div class="col-full">
+                <div class="about-profile-bg"></div>
+                <div class="intro">
+                    <h3 class="animate-this">What it Does</h3>
+                    <p  class="lead animate-this"> Empowers the visually impaired population.<br>
+                        Boosts independence for people in their <span style='color:#CCAC00;'>Golden years</span>.
+                    </p>
+                </div>
+                <div class="more animate-intro">
+                    <a class="smoothscroll button stroke" href="#services">
+                        See it in Action
+                    </a>
+                </div>
+            </div> <!-- end col-full  -->
+        </div> <!-- end about-wrap  -->
+    </section> <!-- end about -->
+
+<!-- Services
+   ================================================== -->
+    <section id="services">
+
+        <div class="row about-wrap">
+            <div class="col-full">
+                <div class="about-profile-bg" style="background: grey;"></div>
+                <div class="intro">
+                    <h1 class="animate-this" style=" text-align: center; color: #EE6055">Capture / Upload Image</h1>
+                </div>
+            </div>
+
+            <video id="player"  width="560" height="440" autoplay></video> &nbsp &nbsp &nbsp
+            <canvas id="canvas" width="560" height="420" ></canvas><br><br>
+            <button type="button" id="capture" onclick="show();setTimeout(saveImage, 100);" style="color: white; background: transparent; border: 3px solid #EE6055; align-self: center;display: block; margin: 0 auto;">
+                Capture
+            </button>
+            <br>
+
+            <form id="myform" action = "http://localhost:5000/my-link/" method = "POST" enctype = "multipart/form-data" target="output_frame" >
+                <input style="color: white; background: transparent; float:left; display: block; margin: -6% 22%;" type="file" accept="image/*" name="file" capture id="file-input" onclick="show()">
+                <br>
+                <input type = "submit" style="color: white; background: transparent; border: 3px solid #EE6055; align-self: center; display: block; margin: -113px 29% 0 -1px; float:right; ">
+            </form>
+            <img id="output" style="width: 50%; height: 50%; float: left;">
+            <div id="asdf" style="display: none; width: 100%; height: auto; position: center;">
+                <iframe id="output_frame" name="output_frame" style="background-color: white; width: 45%; height: 513px; float: right; overflow-y: visible" src="" >
+                </iframe>
+            </div>
+            
+            <script>
+                $("#myform").submit(function(e) {
+                  $("#asdf").show();
+                  console.log('print')
+                });
+                document.getElementById("asdf").height = "500";
+                document.getElementById("output_frame").height = "500";
+            </script>
+
+            <script>
+              function show(){
+                document.getElementById('capture1').style.visibility = "visible";
+                document.getElementById('capture').style.display = "none";
+              }
+
+              function myFunction() {
+                var x = document.getElementById("myDIV");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+              }
+
+                const player = document.getElementById('player');
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+                const captureButton = document.getElementById('capture');
+
+                const constraints = {
+                    video: true,
+                };
+
+                captureButton.addEventListener('click', () => {
+                // Draw the video frame to the canvas.
+                context.drawImage(player, 0, 0, canvas.width, canvas.height);
+                });
+
+              // Attach the video stream to the video element and autoplay.
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then((stream) => {
+                    player.srcObject = stream;
+                });
+
+                function saveImage() {
+                    var ua = window.navigator.userAgent;
+                    if (ua.indexOf("Chrome") > 0) {
+                    // save image as png
+                    var link = document.createElement('a');
+                    link.download = "test1.png";
+                    link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                    link.click();
+                    }
+                }
+            </script>
+
+<!-- To show the upload image as canvas -->
+
+            <div id="next">
+                <script>
+//                To get the fileName
+                    function alerting(){
+                        const fullpath = document.getElementById('file-input').value;
+                        const fullPathSplit = fullpath.split('\\');
+                        const fileNamee = fullPathSplit[fullPathSplit.length - 1]
+                        document.getElementById('asdf').style.visibility = "visible";
+                    }
+
+                    const fileInput = document.getElementById('file-input');
+                    fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
+                    const output = document.getElementById('output');
+
+                    function doSomethingWithFiles(fileList) {
+                        let file = null;
+                        for (let i = 0; i < fileList.length; i++) {
+                            if (fileList[i].type.match(/^image\//)) {
+                                file = fileList[i];
+                                break;
+                            }
+                        }
+                        if (file !== null) {
+                            output.src = URL.createObjectURL(file);
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </section>
+
+     <!-- Java Script
+   ================================================== -->
+    <script src="{{ url_for('static', filename='js/jquery-2.1.3.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/plugins.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+
+    </body>
+</html>
